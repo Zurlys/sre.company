@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRE.company - Reliability Engineering & Infrastructure</title>
+  <meta name="description" content="SRE, DevOps, and infrastructure engineering. Site reliability, CI/CD pipelines, Linux administration, cloud architecture, and operational problem-solving.">
+  <meta property="og:title" content="SRE.company - Reliability Engineering & Infrastructure">
+  <meta property="og:description" content="Practical SRE and infrastructure engineering. We keep your systems running.">
+  <meta property="og:type" content="website">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080a0f;
+      --bg-card:      #0d1018;
+      --bg-card-h:    #111520;
+      --border:       #181d28;
+      --border-h:     #2a3348;
+      --text:         #c8cdd8;
+      --text-strong:  #e8ecf4;
+      --muted:        #525c6e;
+      --accent:       #3b7cff;
+      --accent-glow:  rgba(59, 124, 255, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── WRAP ── */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(8, 10, 15, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+      height: 60px;
+    }
+
+    .logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-strong);
+    }
+    .logo span { color: var(--muted); font-weight: 400; }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    nav ul a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      transition: color 0.18s;
+    }
+    nav ul a:hover { color: var(--text-strong); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity: 0.55;
+      mask-image: radial-gradient(ellipse 75% 65% at 40% 50%, black 0%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 15%; left: 30%;
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(59,124,255,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding-top: 60px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.75rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      color: var(--text-strong);
+      margin-bottom: 1.5rem;
+      max-width: 680px;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin-bottom: 2.75rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.7rem 1.6rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 6px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border-h);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: clamp(5rem, 9vw, 7.5rem) clamp(1.5rem, 5vw, 3rem);
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.028em;
+      color: var(--text-strong);
+      margin-bottom: 0.9rem;
+    }
+
+    .section-intro {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 3.5rem;
+      line-height: 1.7;
+    }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .svc {
+      background: var(--bg-card);
+      padding: 2rem;
+      transition: background 0.18s;
+    }
+    .svc:hover { background: var(--bg-card-h); }
+
+    .svc-icon {
+      width: 40px; height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+    }
+
+    .svc h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .svc p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1.1rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: var(--border);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .locations { display: flex; flex-direction: column; gap: 0.9rem; }
+
+    .loc {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .loc-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ── */
+    .contact-box {
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-item:last-child { border-bottom: none; }
+
+    .contact-icon {
+      width: 34px; height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border-radius: 6px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .clabel {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .cvalue a {
+      font-size: 0.9rem;
+      color: var(--text-strong);
+      transition: color 0.18s;
+    }
+    .cvalue a:hover { color: var(--accent); }
+
+    .noscript-note {
+      padding: 1.75rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem clamp(1.5rem, 5vw, 3rem);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 560px) {
+      nav ul { gap: 1.5rem; }
+      h1 { font-size: 2.4rem; }
+    }
+    @media (max-width: 420px) {
+      nav ul li:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">SRE<span>.company</span></a>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero" style="border-top: none;">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Infrastructure Engineering</div>
+    <h1>Reliability is<br>not an accident.</h1>
+    <p class="hero-sub">We design, build, and operate the infrastructure that keeps your systems alive - from CI/CD pipelines to bare metal.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn">Get in touch</a>
+      <a href="#services" class="btn btn-ghost">Our services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-label">What we do</div>
+    <h2>Services</h2>
+    <p class="section-intro">End-to-end operational engineering - from reliability strategy to day-to-day systems administration.</p>
+
+    <div class="services-grid">
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <h3>Site Reliability Engineering</h3>
+        <p>SLOs, error budgets, observability design, on-call structure, and incident response. Applied engineering, not just theory.</p>
+        <div class="tags">
+          <span class="tag">SLOs / Error Budgets</span>
+          <span class="tag">Incident Response</span>
+          <span class="tag">Observability</span>
+          <span class="tag">On-call Design</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3>DevOps &amp; CI/CD</h3>
+        <p>Pipeline architecture, automated testing, deployment strategies, and release management across major platforms.</p>
+        <div class="tags">
+          <span class="tag">Azure DevOps</span>
+          <span class="tag">Jenkins</span>
+          <span class="tag">GitLab</span>
+          <span class="tag">IaC</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3>Linux &amp; FreeBSD Administration</h3>
+        <p>Server provisioning, hardening, performance tuning, and day-to-day operations for Linux and FreeBSD environments.</p>
+        <div class="tags">
+          <span class="tag">Linux</span>
+          <span class="tag">FreeBSD</span>
+          <span class="tag">Hardening</span>
+          <span class="tag">Performance Tuning</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+            <line x1="6" y1="6" x2="6.01" y2="6"/>
+            <line x1="6" y1="18" x2="6.01" y2="18"/>
+          </svg>
+        </div>
+        <h3>Cloud &amp; Private Infrastructure</h3>
+        <p>Architecture, migration, and optimization across Azure, private clouds, and on-premise environments.</p>
+        <div class="tags">
+          <span class="tag">Azure</span>
+          <span class="tag">Private Cloud</span>
+          <span class="tag">Broadcom</span>
+          <span class="tag">Pure Linux</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+        </div>
+        <h3>Technology Consulting</h3>
+        <p>Architecture reviews, technology selection, and roadmap planning grounded in real operational experience.</p>
+        <div class="tags">
+          <span class="tag">Architecture Review</span>
+          <span class="tag">Tech Selection</span>
+          <span class="tag">Roadmapping</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <h3>Operational Problem Solving</h3>
+        <p>We parachute in when things break. Legacy systems, performance crises, unplanned outages - we've seen it before.</p>
+        <div class="tags">
+          <span class="tag">Legacy Systems</span>
+          <span class="tag">Crisis Response</span>
+          <span class="tag">Root Cause Analysis</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <polyline points="11 8 11 11 13 13"/>
+          </svg>
+        </div>
+        <h3>Infrastructure Audits</h3>
+        <p>Comprehensive review of your infrastructure, tooling, and operational processes - with a clear, actionable report.</p>
+        <div class="tags">
+          <span class="tag">Security Posture</span>
+          <span class="tag">Process Review</span>
+          <span class="tag">Tooling Assessment</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            <path d="M14 17.5h3m3 0h-3m0 0v-3m0 3v3"/>
+          </svg>
+        </div>
+        <h3>Infrastructure &amp; Solutions Engineering</h3>
+        <p>End-to-end design and delivery of infrastructure solutions - from network and storage architecture to custom tooling that ties it all together.</p>
+        <div class="tags">
+          <span class="tag">Architecture Design</span>
+          <span class="tag">Network &amp; Storage</span>
+          <span class="tag">Custom Tooling</span>
+          <span class="tag">Integration</span>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 13h6l3-9 4 18 3-9h4"/>
+          </svg>
+        </div>
+        <h3>LMA Observability Stack</h3>
+        <p>Full-stack observability with Grafana's LMA suite - unified logs, metrics, and alerting without the operational overhead of heavyweight platforms.</p>
+        <div class="tags">
+          <span class="tag">Loki</span>
+          <span class="tag">Mimir</span>
+          <span class="tag">Alertmanager</span>
+          <span class="tag">Grafana</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">Who we are</div>
+    <h2>Practical engineers,<br>not slide-deck consultants.</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>SRE.company is a boutique infrastructure and reliability engineering firm. We work directly with engineering teams and technical leadership - no account managers, no middlemen. Just engineers who get things done.</p>
+        <p>Our engineers carry over 30 years of combined hands-on experience. We've guided datacenter migrations that couldn't slip, diagnosed outages at 3 AM that no one else could crack, and inherited infrastructure that was held together by duct tape and institutional memory. That depth of hard-won knowledge means fewer surprises, faster diagnosis, and solutions built to last.</p>
+        <p>We take on engagements ranging from short-term crisis response to long-term embedded partnerships. Our work is hands-on: we configure the systems, write the automation, and own the outcomes.</p>
+        <p>Remote-first with engineers across Central Europe and the Canary Islands. Available across EU time zones.</p>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom: 1.1rem;">Locations</div>
+        <div class="locations">
+          <div class="loc"><div class="loc-dot"></div>Lithuania</div>
+          <div class="loc"><div class="loc-dot"></div>Luxembourg</div>
+          <div class="loc"><div class="loc-dot"></div>Canary Islands, Spain</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-label">Get in touch</div>
+    <h2>Let's talk about<br>your infrastructure.</h2>
+    <p class="section-intro">Tell us what you're working on. We'll tell you if we can help.</p>
+
+    <div class="contact-box">
+      <div id="contact-details">
+        <noscript><div class="noscript-note">Enable JavaScript to view contact details.</div></noscript>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© <span id="yr"></span> SRE.company. All rights reserved.</div>
+    <div class="footer-copy">Lithuania · Luxembourg · Canary Islands</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Email: info@sre.company (char codes, no plaintext in source)
+  var e = [105,110,102,111,64,115,114,101,46,99,111,109,112,97,110,121];
+  // Phone: +37063376666
+  var p = [43,51,55,48,54,51,51,55,54,54,54,54];
+
+  var email = e.map(function (c) { return String.fromCharCode(c); }).join('');
+  var phone = p.map(function (c) { return String.fromCharCode(c); }).join('');
+
+  var iconEmail =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>' +
+      '<polyline points="22,6 12,13 2,6"/>' +
+    '</svg>';
+
+  var iconPhone =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>' +
+    '</svg>';
+
+  document.getElementById('contact-details').innerHTML =
+    '<div class="contact-item">' +
+      '<div class="contact-icon">' + iconEmail + '</div>' +
+      '<div>' +
+        '<div class="clabel">Email</div>' +
+        '<div class="cvalue"><a href="mailto:' + email + '">' + email + '</a></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="contact-item">' +
+      '<div class="contact-icon">' + iconPhone + '</div>' +
+      '<div>' +
+        '<div class="clabel">Phone</div>' +
+        '<div class="cvalue"><a href="tel:' + phone + '">' + phone + '</a></div>' +
+      '</div>' +
+    '</div>';
+
+  // Dynamic year
+  var yr = document.getElementById('yr');
+  if (yr) yr.textContent = new Date().getFullYear();
+}());
+</script>
+
+</body>
+</html>
