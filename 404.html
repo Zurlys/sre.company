@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - SRE.company</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f4f6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#060910" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Same rule as the homepage: a saved choice wins, otherwise follow the system scheme.
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (err) {}
+      var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    }());
+  </script>
+  <style>
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('/fonts/jetbrains-mono.woff2') format('woff2');
+      font-weight: 100 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f4f6fb;
+      --border-h:    #b8c4dc;
+      --text:        #3a4058;
+      --text-strong: #111827;
+      --copy:        #49536c;
+      --muted:       #56627d;
+      --accent:      #2563eb;
+      --btn-bg:      #2563eb;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+      color-scheme: light;
+    }
+    [data-theme="dark"] {
+      --bg:          #060910;
+      --border-h:    #2a3348;
+      --text:        #c8cdd8;
+      --text-strong: #e8ecf4;
+      --copy:        #a3acbe;
+      --muted:       #7f8a9e;
+      --accent:      #3b7cff;
+      color-scheme: dark;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    header {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-strong);
+    }
+    .logo::before { content: '~/'; color: var(--accent); font-weight: 400; }
+    .logo span { color: var(--muted); font-weight: 400; }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 0 6rem;
+    }
+
+    .term {
+      max-width: 560px;
+      background: #0b0f17;
+      border: 1px solid #1c2333;
+      border-radius: 10px;
+      overflow: hidden;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      font-variant-ligatures: none;
+      margin-bottom: 2.5rem;
+    }
+    .term-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.65rem 1rem;
+      background: #0e1420;
+      border-bottom: 1px solid #1c2333;
+    }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; background: #2a3348; }
+    .term-body {
+      padding: 1.1rem 1.25rem 1.25rem;
+      color: #8b94a7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .t-p { color: #3fb950; }
+    .t-c { color: #dfe5f0; }
+    .t-err { color: #f0883e; }
+    .caret {
+      display: inline-block;
+      width: 8px; height: 1.05em;
+      background: #dfe5f0;
+      vertical-align: text-bottom;
+      animation: blink 1.1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    h1 {
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.028em;
+      color: var(--text-strong);
+      margin-bottom: 0.9rem;
+    }
+    p {
+      font-size: 0.95rem;
+      color: var(--copy);
+      max-width: 520px;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.7rem 1.5rem;
+      background: var(--btn-bg);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-radius: 6px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.18s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    @media (max-width: 560px) {
+      .term { font-size: 0.72rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .caret { animation: none; }
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">sre<span>.company</span></a>
+</header>
+
+<main>
+  <div class="term" aria-hidden="true">
+    <div class="term-bar">
+      <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+    </div>
+    <pre class="term-body"><span class="t-p">$</span> <span class="t-c">curl -sI https://sre.company<span id="path">/this-page</span> | head -1</span>
+<span class="t-err">HTTP/2 404</span>
+<span class="t-p">$</span> <span class="caret"></span></pre>
+  </div>
+
+  <h1>404: no such file or directory</h1>
+  <p>Nothing lives at this address. The link may be old or mistyped. Everything we publish is on the homepage.</p>
+  <a href="/" class="btn">Back to the homepage</a>
+</main>
+
+<script>
+  // Show the path that was actually requested. textContent keeps it inert.
+  (function () {
+    var el = document.getElementById('path');
+    if (el && location.pathname) el.textContent = location.pathname.slice(0, 60);
+  }());
+</script>
+
+</body>
+</html>
